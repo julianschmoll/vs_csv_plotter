@@ -1,7 +1,3 @@
-# Import built-in modules
-import os
-import logging
-
 # Import local modules
 from scripts import plots
 from scripts import csv_utils

@@ -160,5 +160,5 @@ cython_debug/
 #.idea/
 
 # Plots
-plot
-data/csv/
+plot/*
+data/csv/*

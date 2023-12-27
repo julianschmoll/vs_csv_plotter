@@ -1,3 +1,6 @@
+# import build-in modules
+import os
+
 # Import local modules
 import constants
 
@@ -5,6 +8,11 @@ import constants
 from matplotlib import pyplot as plt
 from datetime import datetime
 
+
+def prepare_plot_folder():
+    if not os.path.exists(constants.PLOT_FOLDER):
+        os.makedirs(constants.PLOT_FOLDER)
+    
 def plot_age_distribution(csv_data, save=constants.SAVE_PLOT, show=constants.SHOW_PLOT):
     age_counts = csv_data["Altersklasse"].value_counts()
     age_percent = age_counts / age_counts.sum() * 100

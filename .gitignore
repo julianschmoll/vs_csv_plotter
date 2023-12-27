@@ -161,3 +161,4 @@ cython_debug/
 
 # Plots
 plot
+data/csv/

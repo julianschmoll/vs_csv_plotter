@@ -19,8 +19,7 @@ def prepare_plot_folder():
 def concat_from_folder(folder_path=constants.DATA_FOLDER):
     csv_files = [f for f in os.listdir(folder_path) if f.endswith(".csv")]
     if not csv_files:
-        LOGGER.error("No CSV Files in Folder")
-        return None
+        raise FileNotFoundError("No CSV Files in Folder {0}.".format(os.path.abspath(folder_path)))
     df_list = []
     for file in csv_files:
         file_path = os.path.join(folder_path, file)

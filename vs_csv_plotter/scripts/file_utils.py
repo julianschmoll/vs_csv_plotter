@@ -1,6 +1,7 @@
 # Import built-in modules
 import os
 import logging
+import re
 
 # Import local modules
 import constants
@@ -39,3 +40,7 @@ def get_timestamp(folder_path=constants.DATA_FOLDER):
         if newest_timestamp is None or timestamp_human_readable > newest_timestamp:
             newest_timestamp = timestamp_human_readable
     return newest_timestamp
+
+def sanitize_filename(name):
+    save_name = re.sub(r"[^a-zA-Z0-9_-]", "", name.replace(" ", "_"))
+    return save_name

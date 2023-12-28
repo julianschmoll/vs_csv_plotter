@@ -27,7 +27,7 @@ def pie(data, title, save=constants.SAVE_PLOT, show=constants.SHOW_PLOT):
             xycoords='axes fraction',
             ha='center',
             va="center",
-            fontsize=constants.FOOTNOTE_FONT["fontsize"]
+            **constants.FOOTNOTE_FONT
     )
     if save:
         plt.savefig("{0}/{1}.svg".format(constants.PLOT_FOLDER, file_utils.sanitize_filename(title)))

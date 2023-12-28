@@ -13,14 +13,14 @@ SAVE_PLOT = True
 SHOW_PLOT = False
 
 # Style settings
-HEADLINE_FONTSTYLE = FontProperties(fname="data/fonts/open-sans-v34-latin-800.ttf")
-STANDART_FONTSTYLE = FontProperties(fname="data/fonts/open-sans-v34-latin-500.ttf")
-FOOTNOTE_FONTSTYLE = FontProperties(fname="data/fonts/open-sans-v34-latin-300italic.ttf")
+HEADLINE_FONTSTYLE = FontProperties(fname="data/fonts/futura/Futura Bold font.ttf")
+STANDART_FONTSTYLE = FontProperties(fname="data/fonts/futura/Futura Book font.ttf")
+FOOTNOTE_FONTSTYLE = FontProperties(fname="data/fonts/futura/Futura Light Italic font.ttf")
 
 CUSTOM_COLORS = [
-    "#086b66", 
-    "#f7931e", 
-    "#ffcb05", 
+    "#FEED00", 
+    "#FFB30D", 
+    "#B9E3F9", 
 ]
 HEADLINE_FONT = {
     "fontsize": 16, 

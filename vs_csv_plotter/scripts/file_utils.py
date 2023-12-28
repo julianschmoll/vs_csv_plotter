@@ -44,7 +44,7 @@ def get_timestamp(folder_path=constants.DATA_FOLDER):
         timestamp_human_readable = pd.to_datetime(timestamp_seconds, unit='s')
         if newest_timestamp is None or timestamp_human_readable > newest_timestamp:
             newest_timestamp = timestamp_human_readable
-    return newest_timestamp
+    return "CSV File Timestamp: {0}".format(newest_timestamp.strftime('%d.%m.%Y - %H:%M:%S'))
 
 def sanitize_filename(name):
     save_name = re.sub(r"[^a-zA-Z0-9_-]", "", name.replace(" ", "_"))

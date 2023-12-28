@@ -134,7 +134,6 @@ def line_with_mean(plot_data, mean_list, title):
     save_or_show_plot(title)
 
 
-
 def set_sns_theme():
     """Set seaboorn theme constants."""
     sns.set_theme(

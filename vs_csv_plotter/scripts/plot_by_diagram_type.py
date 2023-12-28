@@ -3,6 +3,7 @@ import os
 
 # Import local modules
 import constants
+from scripts import file_utils
 
 # Import third-party modules
 from matplotlib import pyplot as plt
@@ -21,7 +22,7 @@ def pie(data, title, save=constants.SAVE_PLOT, show=constants.SHOW_PLOT):
     )
     plt.title(title, constants.HEADLINE_FONT)
     plt.annotate(
-            str(datetime.now()),
+            str(file_utils.get_timestamp()),
             xy = (0.5, -0.1),
             xycoords='axes fraction',
             ha='center',
@@ -29,7 +30,7 @@ def pie(data, title, save=constants.SAVE_PLOT, show=constants.SHOW_PLOT):
             fontsize=constants.FOOTNOTE_FONT["fontsize"]
     )
     if save:
-        plt.savefig("{0}/{1}.svg".format(constants.PLOT_FOLDER, title.replace(" ", "_")))
+        plt.savefig("{0}/{1}.svg".format(constants.PLOT_FOLDER, file_utils.sanitize_filename(title)))
     if show:
         plt.show()
         

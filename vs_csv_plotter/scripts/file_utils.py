@@ -33,6 +33,10 @@ def concat_from_folder(folder_path=constants.DATA_FOLDER):
     combined_df = pd.concat(df_list, ignore_index=True)
     return combined_df
 
+def replace_ger_eng(csv_data):
+    csv_data.replace({"Ja": "Yes", "Nein": "No"}, inplace=True)
+    return csv_data
+
 
 @cached(cache=TTLCache(maxsize=1024, ttl=_CACHE_TIMEOUT))
 def get_timestamp(folder_path=constants.DATA_FOLDER):

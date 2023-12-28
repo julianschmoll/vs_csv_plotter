@@ -101,5 +101,8 @@ def sanitize_filename(name):
     Returns:
         str: The sanitized string.
     """
-    save_name = re.sub("[^a-zA-Z0-9_-]", "", name.replace(" ", "_"))
-    return save_name  # noqa: WPS331 as we might add more actions on save_name
+    tmp_name = name.replace(">", "over ")
+    tmp_name = tmp_name.replace("<", "below ")
+    tmp_name = tmp_name.replace("≤", "below or equal ")
+    tmp_name = tmp_name.replace(" ", "_")
+    return re.sub("[^a-zA-Z0-9_-]", "", tmp_name.lower())

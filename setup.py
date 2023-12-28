@@ -11,5 +11,6 @@ setup(
         'matplotlib',
         'cachetools',
         'seaborn',
+        'pylatex'
     ],
 )

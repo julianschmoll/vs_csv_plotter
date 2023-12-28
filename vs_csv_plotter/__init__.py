@@ -1,3 +1,4 @@
+"""Initialize vs_csv_plotter"""
 # Import builtin modules
 import os
 

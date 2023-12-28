@@ -1,3 +1,4 @@
+"""Main generation script"""
 # Import local modules
 from scripts import plots
 from scripts.file_utils import replace_ger_eng

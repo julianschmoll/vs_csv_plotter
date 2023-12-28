@@ -10,5 +10,6 @@ setup(
         'pandas',
         'matplotlib',
         'cachetools',
+        'seaborn',
     ],
 )

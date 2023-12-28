@@ -1,13 +1,10 @@
-# import build-in modules
-import os
-
 # Import local modules
 import constants
 from scripts import file_utils
 
 # Import third-party modules
 from matplotlib import pyplot as plt
-from datetime import datetime
+
 
 def save_or_show_plot(title, save=constants.SAVE_PLOT, show=constants.SHOW_PLOT):
     plt.title(title, constants.HEADLINE_FONT)

@@ -4,7 +4,9 @@ from matplotlib.font_manager import FontProperties
 # File settings
 DATA_FOLDER = "data/csv"
 PLOT_FOLDER = "plot"
-timestamp = None
+
+# Data
+STUDENTS=5500
 
 # Default Settings
 SAVE_PLOT = True

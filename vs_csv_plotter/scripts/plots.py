@@ -19,21 +19,24 @@ def plot_age_distribution(csv_data):
     plot.pie(age_counts, "Age Distribution")
 
 
-def plot_youth_ticket_data(csv_data):
+def plot_ticket_data(csv_data):
     row_index = "Beziehst du aktuell das Jugendticket BW / Würdest du das Jugendticket BW beziehen wenn du berechtigt wärst?"
     d_ticket_index = "Beziehst du aktuell das Deutschlandticket (49 € Ticket)?"
+    
     over_26_data = csv_data[csv_data["Altersklasse"] == "> 26"]
     under_26_data = csv_data[csv_data["Altersklasse"] == "≤ 26"]
-    over_26_cout = over_26_data[row_index].value_counts()
-    under_26_cout = under_26_data[row_index].value_counts()
     
+    over_26_count = over_26_data[row_index].value_counts()
+    over_26_d_ticket_count = over_26_data[d_ticket_index].value_counts()
+    
+    under_26_count = under_26_data[row_index].value_counts()
     under_26_no_youth_ticket = under_26_data[under_26_data[row_index] == "Nein"]
     under_26_d_ticket = under_26_no_youth_ticket[d_ticket_index].value_counts()
-
-    removed_no = under_26_cout.drop("Nein", errors="ignore")
+    removed_no = under_26_count.drop("Nein", errors="ignore")
     under_26_d_ticket = under_26_d_ticket.rename(index={"Ja": "Nein aber D-Ticket"})
     combined_under_26 = removed_no.add(under_26_d_ticket, fill_value=0)
     
-    plot.pie(over_26_cout, "Would you buy the JugendBW-Ticket if eligible? (> 26)")
-    plot.pie(combined_under_26, "Do you currently have the JugendBW-Ticket? (< 27)")
+    plot.pie(over_26_count, "Would you buy the JugendBW-Ticket if eligible? (>26)")
+    plot.pie(over_26_d_ticket_count, "Do you own the D-Ticket? (>26)")
+    plot.pie(combined_under_26, "Do you currently have the JugendBW-Ticket? (<27)")
     

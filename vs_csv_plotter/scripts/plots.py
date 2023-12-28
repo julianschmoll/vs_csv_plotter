@@ -30,10 +30,10 @@ def plot_ticket_data(csv_data):
     over_26_d_ticket_count = over_26_data[d_ticket_index].value_counts()
     
     under_26_count = under_26_data[row_index].value_counts()
-    under_26_no_youth_ticket = under_26_data[under_26_data[row_index] == "Nein"]
+    under_26_no_youth_ticket = under_26_data[under_26_data[row_index] == "No"]
     under_26_d_ticket = under_26_no_youth_ticket[d_ticket_index].value_counts()
-    removed_no = under_26_count.drop("Nein", errors="ignore")
-    under_26_d_ticket = under_26_d_ticket.rename(index={"Ja": "Nein aber D-Ticket"})
+    removed_no = under_26_count.drop("No", errors="ignore")
+    under_26_d_ticket = under_26_d_ticket.rename(index={"Yes": "No, normal D-Ticket"})
     combined_under_26 = removed_no.add(under_26_d_ticket, fill_value=0)
     
     plot.pie(over_26_count, "Would you buy the JugendBW-Ticket if eligible? (>26)")

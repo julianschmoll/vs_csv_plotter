@@ -6,6 +6,34 @@ import pandas as pd
 from scripts import plot_by_diagram_type as plot
 
 
+def plot_financial_impact(csv_data):
+    """Generate a line plot comparing the financial impact ratings.
+
+    Parameters:
+        csv_data (pd.DataFrame): DataFrame with survey data.
+
+    """
+    row_index = (
+        "Wie stark würde dich das vollsolidarische bundesweite Semesterticket "
+        + "finanziell treffen? (Skala 1 (kein/kleines Problem) - 10 (nicht finanzierbar))"
+    )
+    over_26_data = csv_data[csv_data["Altersklasse"] == "> 26"]
+    under_26_data = csv_data[csv_data["Altersklasse"] == "≤ 26"]
+    plot_data_over_26 = pd.DataFrame({
+        'Rating': over_26_data[row_index],
+        'Age Group': "> 26"
+    })
+    plot_data_under_26 = pd.DataFrame({
+        'Rating': under_26_data[row_index],
+        'Age Group': "≤ 26"
+    })
+    mean_over_26 = over_26_data[row_index].mean()
+    mean_under_26 = under_26_data[row_index].mean()
+    mean_list = [("> 26", mean_over_26), ("≤ 26", mean_under_26)]
+    plot_data = pd.concat([plot_data_over_26, plot_data_under_26])
+    plot.line_with_mean(plot_data, mean_list, "Financial Impact")
+
+
 def plot_participation(csv_data):
     """Plot the participation compared to all students.
 

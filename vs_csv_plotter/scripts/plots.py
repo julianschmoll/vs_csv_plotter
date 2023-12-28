@@ -45,7 +45,10 @@ def plot_ticket_data(csv_data):
         csv_data (pd.DataFrame): DataFrame containing survey data.
 
     """
-    row_index = "Beziehst du aktuell das Jugendticket BW / Würdest du das Jugendticket BW beziehen wenn du berechtigt wärst?"
+    row_index = (
+        "Beziehst du aktuell das Jugendticket BW / "
+        "Würdest du das Jugendticket BW beziehen wenn du berechtigt wärst?"
+    )
     d_ticket_index = "Beziehst du aktuell das Deutschlandticket (49 € Ticket)?"
 
     over_26_data = csv_data[csv_data["Altersklasse"] == "> 26"]
@@ -61,6 +64,10 @@ def plot_ticket_data(csv_data):
     under_26_d_ticket = under_26_d_ticket.rename(index={"Yes": "No, D-Ticket"})
     combined_under_26 = removed_no.add(under_26_d_ticket, fill_value=0)
 
-    plot.pie(over_26_count, "Would you buy the JugendBW-Ticket if eligible? (>26)")
+    plot.pie(
+        over_26_count, "Would you buy the JugendBW-Ticket if eligible? (>26)"
+    )
     plot.pie(over_26_d_ticket_count, "Do you own the D-Ticket? (>26)")
-    plot.pie(combined_under_26, "Do you currently have the JugendBW-Ticket? (≤26)")
+    plot.pie(
+        combined_under_26, "Do you currently have the JugendBW-Ticket? (≤26)"
+    )

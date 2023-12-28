@@ -25,9 +25,9 @@ FOOTNOTE_FONTSTYLE = FontProperties(
 )
 
 CUSTOM_COLORS = [
-    "#FEED00", 
-    "#FFB30D", 
-    "#B9E3F9", 
+    "#FEED00",
+    "#FFB30D",
+    "#B9E3F9",
 ]
 HEADLINE_FONT = {
     "fontsize": 16,

@@ -34,11 +34,13 @@ def concat_from_folder(folder_path=constants.DATA_FOLDER):
                                      Defaults to constants.DATA_FOLDER.
 
     Returns:
-        pd.DataFrame: Combined DataFrame containing data from all CSV files in the folder.
+        pd.DataFrame: Combined DataFrame containing data from all CSV files.
     """
     csv_files = [f for f in os.listdir(folder_path) if f.endswith(".csv")]
     if not csv_files:
-        raise FileNotFoundError("No CSV Files in Folder {0}.".format(os.path.abspath(folder_path)))
+        raise FileNotFoundError("No CSV Files in Folder {0}.".format(
+            os.path.abspath(folder_path))
+        )
     df_list = []
     for file in csv_files:
         file_path = os.path.join(folder_path, file)
@@ -72,7 +74,10 @@ def get_timestamp(folder_path=constants.DATA_FOLDER):
     Returns:
         str: Timestamp formatted as "CSV File Timestamp.
     """
-    files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+    files = [
+        f for f in os.listdir(folder_path)
+        if os.path.isfile(os.path.join(folder_path, f))
+    ]
     newest_timestamp = None
     for file in files:
         file_path = os.path.join(folder_path, file)
@@ -80,7 +85,9 @@ def get_timestamp(folder_path=constants.DATA_FOLDER):
         timestamp = pd.to_datetime(timestamp_seconds, unit='s')
         if newest_timestamp is None or timestamp > newest_timestamp:
             newest_timestamp = timestamp
-    return "CSV File Timestamp: {0}".format(newest_timestamp.strftime('%d.%m.%Y - %H:%M:%S'))
+    return "CSV File Timestamp: {0}".format(
+        newest_timestamp.strftime('%d.%m.%Y - %H:%M:%S')
+    )
 
 
 def sanitize_filename(name):

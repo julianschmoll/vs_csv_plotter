@@ -9,17 +9,7 @@ from scripts import file_utils
 from matplotlib import pyplot as plt
 from datetime import datetime
 
-
-def pie(data, title, save=constants.SAVE_PLOT, show=constants.SHOW_PLOT):
-    plt.clf()
-    plt.pie(
-        data, 
-        labels=data.index, 
-        autopct="%1.1f%%", 
-        startangle=90,
-        colors=constants.CUSTOM_COLORS, 
-        textprops=constants.DESCRIPTION_FONT
-    )
+def save_or_show_plot(title, save=constants.SAVE_PLOT, show=constants.SHOW_PLOT):
     plt.title(title, constants.HEADLINE_FONT)
     plt.annotate(
             str(file_utils.get_timestamp()),
@@ -33,4 +23,17 @@ def pie(data, title, save=constants.SAVE_PLOT, show=constants.SHOW_PLOT):
         plt.savefig("{0}/{1}.svg".format(constants.PLOT_FOLDER, file_utils.sanitize_filename(title)))
     if show:
         plt.show()
-        
+    plt.clf()
+
+
+def pie(data, title):
+    sorted_data = data.sort_index()
+    plt.pie(
+        sorted_data, 
+        labels=sorted_data.index, 
+        autopct="%1.1f%%", 
+        startangle=90,
+        colors=constants.CUSTOM_COLORS, 
+        textprops=constants.DESCRIPTION_FONT
+    )
+    save_or_show_plot(title)

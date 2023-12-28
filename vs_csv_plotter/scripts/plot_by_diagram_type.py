@@ -126,7 +126,10 @@ def line_with_mean(plot_data, mean_list, title):
 
     g.ax.set_yticklabels([f"{tick:.0%}" for tick in g.ax.get_yticks()])
     g.ax.legend()
-    g.set_axis_labels("Rating", "Percent")
+    g.set_axis_labels(
+        "Rating (Scale 1 (no/minor problem) - 10 (cannot be financed))",
+        "Percent"
+    )
     plt.subplots_adjust(top=0.9, bottom=0.125)
     save_or_show_plot(title)
 

@@ -31,7 +31,10 @@ def plot_financial_impact(csv_data):
     mean_under_26 = under_26_data[row_index].mean()
     mean_list = [("> 26", mean_over_26), ("≤ 26", mean_under_26)]
     plot_data = pd.concat([plot_data_over_26, plot_data_under_26])
-    plot.line_with_mean(plot_data, mean_list, "Financial Impact")
+    plot.line_with_mean(
+        plot_data, mean_list,
+        "Financial Impact of solidarity ticket"
+    )
 
 
 def plot_participation(csv_data):
@@ -45,7 +48,7 @@ def plot_participation(csv_data):
     plot_values = [constants.STUDENTS - num_participants, num_participants]
     labels = ["Non-Participants", "Participants"]
     part_data = pd.Series(plot_values, index=labels)
-    plot.pie(part_data, "Participation")
+    plot.pie(part_data, "Participation of all HdM students")
 
 
 def plot_age_distribution(csv_data):
@@ -95,16 +98,17 @@ def plot_ticket_data(csv_data):  # noqa: WPS210 As splitting up wouldn't make se
     support_with_d_ticket_counts = support_with_d_ticket[d_ticket_index].value_counts()
 
     plot.pie(
-        over_26_count, "Would you buy the JugendBW-Ticket if eligible? (>26)"
+        over_26_count, "Would you buy a JugendBW-Ticket if eligible? (>26)"
     )
     plot.pie(
-        over_26_d_ticket_count, "Do you own the D-Ticket? (>26)"
+        over_26_d_ticket_count, "Do you own a D-Ticket? (>26)"
     )
     plot.pie(
-        combined_under_26, "Do you currently have the JugendBW-Ticket? (≤26)"
+        combined_under_26, "Do you currently have a JugendBW-Ticket? (≤26)"
     )
     plot.pie(
-        support_with_d_ticket_counts, "Wanting JugendBW-Ticket, having D-Ticket (>26)"
+        support_with_d_ticket_counts,
+        "Owning a D-Ticket while being interested in JugendBW-Ticket? (>26)"
     )
 
 
@@ -146,13 +150,13 @@ def plot_support_data(csv_data):
 
     not_wealthy_data = csv_data[csv_data[wealth_index] > 7]
     not_wealthy_support_count = not_wealthy_data[row_index].value_counts()
-    
+
     not_having_or_wanting = csv_data[csv_data[row_index_bw_ticket] == "No"]
     not_having_or_wanting = not_having_or_wanting[not_having_or_wanting[d_ticket_index] == "No"]
     not_having_or_wanting_count = not_having_or_wanting[row_index].value_counts()
-    
+
     plot.pie(
-        over_26_count, "Would you support a full solidarity ticket for Germany? (> 26)"
+        over_26_count, "Would you support a full solidarity ticket for Germany? (>26)"
     )
     plot.pie(
         general_count, "Would you support a full solidarity ticket for Germany?"
@@ -161,11 +165,14 @@ def plot_support_data(csv_data):
         under_26_count, "Would you support a full solidarity ticket for Germany? (≤26)"
     )
     plot.pie(
-        wealthy_support_count, "Support by not financially affected (<4)"
+        wealthy_support_count,
+        "Support for full solidarity ticket by financially not affected (Rated <4)"
     )
     plot.pie(
-        not_wealthy_support_count, "Support by financially affected (>7)"
+        not_wealthy_support_count,
+        "Support for full solidarity ticket by financially affected (Rated >7)"
     )
     plot.pie(
-        not_having_or_wanting_count, "Currently not interested in ticket but would support solidaty Ticket"
+        not_having_or_wanting_count,
+        "Currently not interested in any ticket but would support solidarity Ticket"
     )

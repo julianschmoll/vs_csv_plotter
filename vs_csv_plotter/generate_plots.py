@@ -17,6 +17,7 @@ class PlotGenerator:
         plots.plot_participation(self.combined_data)
         plots.plot_age_distribution(self.combined_data)
         plots.plot_ticket_data(self.combined_data)
+        plots.plot_support_data(self.combined_data)
         plots.plot_financial_impact(self.combined_data)
 
 if __name__ == "__main__":

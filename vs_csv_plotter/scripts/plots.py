@@ -38,5 +38,5 @@ def plot_ticket_data(csv_data):
     
     plot.pie(over_26_count, "Would you buy the JugendBW-Ticket if eligible? (>26)")
     plot.pie(over_26_d_ticket_count, "Do you own the D-Ticket? (>26)")
-    plot.pie(combined_under_26, "Do you currently have the JugendBW-Ticket? (<27)")
+    plot.pie(combined_under_26, "Do you currently have the JugendBW-Ticket? (≤26)")
     

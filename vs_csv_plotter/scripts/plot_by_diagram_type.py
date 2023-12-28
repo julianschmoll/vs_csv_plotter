@@ -10,6 +10,7 @@ from datetime import datetime
 
 
 def pie(data, title, save=constants.SAVE_PLOT, show=constants.SHOW_PLOT):
+    plt.clf()
     plt.pie(
         data, 
         labels=data.index, 

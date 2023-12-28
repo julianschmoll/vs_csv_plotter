@@ -84,24 +84,52 @@ def line_with_mean(plot_data, mean_list, title):
     g = sns.displot(
         data=plot_data,
         x="Rating", kind="kde", hue="Age Group",
-        common_norm=False, facet_kws=dict(margin_titles=True),
+        common_norm=False, 
+        facet_kws=dict(margin_titles=True),
         aspect=1.5,
         palette=constants.CUSTOM_COLORS,
+        cut=0,
+        bw_adjust=0.5,
     )
+    g.set(xlim=(1, 10))
     for i, (label, mean_value) in enumerate(mean_list):
         g.ax.axvline(
             x=mean_value,
             linestyle='dashed',
             linewidth=2,
             label=f'Mean ({label})',
-            color=constants.CUSTOM_COLORS[i]
+            color=constants.CUSTOM_COLORS[i],
         )
-    g.set(xlim=(1, 10))
+
+    # Calculate the mean of both age groups
+    both_mean = plot_data['Rating'].mean()
+
+    # Plot the mean as a line curve
+    sns.kdeplot(
+        data=plot_data,
+        x="Rating",
+        common_norm=False,
+        bw_adjust=1,
+        cut=0,
+        color=constants.CUSTOM_COLORS[-1],
+        linewidth=1,
+        alpha=1,
+    )
+    g.ax.axvline(
+        x=both_mean,
+        linestyle='solid',
+        linewidth=10,
+        alpha=0.5,
+        label='Mean (Both)',
+        color=constants.CUSTOM_COLORS[-1],
+    )
+
     g.ax.set_yticklabels([f"{tick:.0%}" for tick in g.ax.get_yticks()])
     g.ax.legend()
     g.set_axis_labels("Rating", "Percent")
     plt.subplots_adjust(top=0.9, bottom=0.125)
     save_or_show_plot(title)
+
 
 
 def set_sns_theme():

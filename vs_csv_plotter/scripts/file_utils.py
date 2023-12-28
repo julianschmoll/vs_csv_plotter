@@ -1,18 +1,14 @@
-"""This module provides functions for preparing, processing, and caching data
-from CSV files.
-"""
+"""Functions for preparing, processing, and caching data from CSV files."""
+import logging
 # Import built-in modules
 import os
-import logging
 import re
 
 # Import local modules
 import constants
-
-# Import third party modiles
-from cachetools import TTLCache
-from cachetools import cached
 import pandas as pd
+# Import third party modiles
+from cachetools import TTLCache, cached
 
 # 10 minutes in seconds.
 _CACHE_TIMEOUT = 600
@@ -30,23 +26,25 @@ def concat_from_folder(folder_path=constants.DATA_FOLDER):
 
     Parameters:
         folder_path (str, optional): Path to the folder containing CSV files.
-                                     Defaults to constants.DATA_FOLDER.
+
+    Raises:
+        FileNotFoundError: If no CSV file is found in folder.
 
     Returns:
         pd.DataFrame: Combined DataFrame containing data from all CSV files.
     """
-    csv_files = [f for f in os.listdir(folder_path) if f.endswith(".csv")]
+    csv_files = [file for file in os.listdir(folder_path) if file.endswith(".csv")]
     if not csv_files:
         raise FileNotFoundError("No CSV Files in Folder {0}.".format(
-            os.path.abspath(folder_path))
+            os.path.abspath(folder_path)
+            )
         )
     df_list = []
     for file in csv_files:
         file_path = os.path.join(folder_path, file)
         df = pd.read_csv(file_path)
         df_list.append(df)
-    combined_df = pd.concat(df_list, ignore_index=True)
-    return combined_df
+    return pd.concat(df_list, ignore_index=True)
 
 
 def replace_ger_eng(csv_data):
@@ -74,18 +72,18 @@ def get_timestamp(folder_path=constants.DATA_FOLDER):
         str: Timestamp formatted as "CSV File Timestamp.
     """
     files = [
-        f for f in os.listdir(folder_path)
-        if os.path.isfile(os.path.join(folder_path, f))
+        file
+        for file in os.listdir(folder_path)
+        if os.path.isfile(os.path.join(folder_path, file))
     ]
     newest_timestamp = None
     for file in files:
-        file_path = os.path.join(folder_path, file)
-        timestamp_seconds = os.path.getmtime(file_path)
+        timestamp_seconds = os.path.getmtime(os.path.join(folder_path, file))
         timestamp = pd.to_datetime(timestamp_seconds, unit='s')
         if newest_timestamp is None or timestamp > newest_timestamp:
             newest_timestamp = timestamp
     return "CSV File Timestamp: {0}".format(
-        newest_timestamp.strftime('%d.%m.%Y - %H:%M:%S')
+        newest_timestamp.strftime('%d.%m.%Y - %H:%M:%S'),
     )
 
 
@@ -98,5 +96,5 @@ def sanitize_filename(name):
     Returns:
         str: The sanitized string.
     """
-    save_name = re.sub(r"[^a-zA-Z0-9_-]", "", name.replace(" ", "_"))
-    return save_name
+    save_name = re.sub("[^a-zA-Z0-9_-]", "", name.replace(" ", "_"))
+    return save_name  # noqa: WPS331 as we might add more actions on save_name

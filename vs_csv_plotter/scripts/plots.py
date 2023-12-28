@@ -1,10 +1,9 @@
-"""Plots from current survey"""
+"""Plots from current survey."""
 # Import local modules
 import constants
-from scripts import plot_by_diagram_type as plot
-
-# Import third party modiles
+# Import third party modules
 import pandas as pd
+from scripts import plot_by_diagram_type as plot
 
 
 def plot_participation(csv_data):
@@ -15,9 +14,9 @@ def plot_participation(csv_data):
 
     """
     num_participants = len(csv_data)-1
-    values = [constants.STUDENTS - num_participants, num_participants]
+    plot_values = [constants.STUDENTS - num_participants, num_participants]
     labels = ["Non-Participants", "Participants"]
-    part_data = pd.Series(values, index=labels)
+    part_data = pd.Series(plot_values, index=labels)
     plot.pie(part_data, "Participation")
 
 
@@ -32,7 +31,7 @@ def plot_age_distribution(csv_data):
     plot.pie(age_counts, "Age Distribution")
 
 
-def plot_ticket_data(csv_data):
+def plot_ticket_data(csv_data):  # noqa: WPS210 As splitting up wouldn't make sense
     """Plot ticket-related data based on survey responses.
 
     This function generates three pie charts illustrating ticket-related
@@ -47,7 +46,7 @@ def plot_ticket_data(csv_data):
     """
     row_index = (
         "Beziehst du aktuell das Jugendticket BW / "
-        "Würdest du das Jugendticket BW beziehen wenn du berechtigt wärst?"
+        + "Würdest du das Jugendticket BW beziehen wenn du berechtigt wärst?"
     )
     d_ticket_index = "Beziehst du aktuell das Deutschlandticket (49 € Ticket)?"
 

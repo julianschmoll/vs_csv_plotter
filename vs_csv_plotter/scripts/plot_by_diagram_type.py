@@ -1,16 +1,15 @@
 """This module provides utility functions for creating charts."""
 # Import local modules
 import constants
-from scripts import file_utils
-
 # Import third-party modules
 from matplotlib import pyplot as plt
+from scripts import file_utils
 
 
 def save_or_show_plot(
     title,
     save=constants.SAVE_PLOT,
-    show=constants.SHOW_PLOT
+    show=constants.SHOW_PLOT,
 ):
     """Save or show a Matplotlib plot based on specified parameters.
 
@@ -20,48 +19,45 @@ def save_or_show_plot(
 
     Parameters:
         title (str): Title of the Matplotlib plot.
-        save (bool, optional): If True, save the plot.
-                                Defaults to constants.SAVE_PLOT.
-        show (bool, optional): If True, display the plot.
-                                Defaults to constants.SHOW_PLOT.
+        save (bool, optional): Defaults to constants.SAVE_PLOT.
+        show (bool, optional): Defaults to constants.SHOW_PLOT.
 
-    Returns:
-        None
     """
     plt.title(title, constants.HEADLINE_FONT)
     plt.annotate(
-            str(file_utils.get_timestamp()),
-            xy=(0.5, -0.1),
-            xycoords='axes fraction',
-            ha='center',
-            va="center",
-            **constants.FOOTNOTE_FONT
+        file_utils.get_timestamp(),
+        xy=(0.5, -0.1),
+        xycoords='axes fraction',
+        ha='center',
+        va="center",
+        **constants.FOOTNOTE_FONT
     )
     if save:
         plt.savefig("{0}/{1}.svg".format(
             constants.PLOT_FOLDER,
-            file_utils.sanitize_filename(title))
+            file_utils.sanitize_filename(title)
+            )
         )
     if show:
         plt.show()
     plt.clf()
 
 
-def pie(data, title):
+def pie(plot_data, title):
     """Generate a pie chart with customized styling.
 
     Parameters:
-        data (pd.Series): Data for the pie chart.
+        plot_data (pd.Series): Data for the pie chart.
         title (str): Title of the pie chart.
 
     """
-    sorted_data = data.sort_index()
+    sorted_data = plot_data.sort_index()
     plt.pie(
         sorted_data,
         labels=sorted_data.index,
         autopct="%1.1f%%",
         startangle=90,
         colors=constants.CUSTOM_COLORS,
-        textprops=constants.DESCRIPTION_FONT
+        textprops=constants.DESCRIPTION_FONT,
     )
     save_or_show_plot(title)

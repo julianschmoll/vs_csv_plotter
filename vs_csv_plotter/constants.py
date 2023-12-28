@@ -1,7 +1,6 @@
 """Constants used by csv_plotter"""
 from matplotlib.font_manager import FontProperties
 
-
 # File settings
 DATA_FOLDER = "data/csv"
 PLOT_FOLDER = "plot"

@@ -1,6 +1,4 @@
-"""This module provides utility functions for creating and customizing pie
-charts using Matplotlib, as well as saving or displaying the generated plots.
-"""
+"""This module provides utility functions for creating charts."""
 # Import local modules
 import constants
 from scripts import file_utils

@@ -1,6 +1,5 @@
 """This module provides functions for preparing, processing, and caching data
-from CSV files. It also includes utilities for managing folders, replacing
-German to English language labels, and generating timestamps.
+from CSV files.
 """
 # Import built-in modules
 import os

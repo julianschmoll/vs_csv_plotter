@@ -1,9 +1,13 @@
 """This module provides utility functions for creating charts."""
+# Import built-in modules
+import logging
 # Import local modules
 import constants
 # Import third-party modules
 from matplotlib import pyplot as plt
 from scripts import file_utils
+
+logging.basicConfig(level=logging.INFO)
 
 
 def save_or_show_plot(
@@ -33,6 +37,7 @@ def save_or_show_plot(
         **constants.FOOTNOTE_FONT
     )
     if save:
+        logging.info("Saving {0} Figure...".format(title))
         plt.savefig("{0}/{1}.svg".format(
             constants.PLOT_FOLDER,
             file_utils.sanitize_filename(title)

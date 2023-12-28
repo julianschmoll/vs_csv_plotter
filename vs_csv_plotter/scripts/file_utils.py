@@ -1,6 +1,6 @@
 """Functions for preparing, processing, and caching data from CSV files."""
-import logging
 # Import built-in modules
+import logging
 import os
 import re
 
@@ -12,12 +12,13 @@ from cachetools import TTLCache, cached
 
 # 10 minutes in seconds.
 _CACHE_TIMEOUT = 600
-LOGGER = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 def prepare_plot_folder():
     """Create the plot folder if it does not exist."""
     if not os.path.exists(constants.PLOT_FOLDER):
+        logging.info("Prepared Plot folder")
         os.makedirs(constants.PLOT_FOLDER)
 
 

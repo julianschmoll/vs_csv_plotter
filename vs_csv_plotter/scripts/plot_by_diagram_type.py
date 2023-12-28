@@ -3,9 +3,10 @@
 import logging
 # Import local modules
 import constants
+from scripts import file_utils
 # Import third-party modules
 from matplotlib import pyplot as plt
-from scripts import file_utils
+import seaborn as sns
 
 logging.basicConfig(level=logging.INFO)
 
@@ -30,12 +31,13 @@ def save_or_show_plot(
     plt.title(title, constants.HEADLINE_FONT)
     plt.annotate(
         file_utils.get_timestamp(),
-        xy=(0.5, -0.1),
-        xycoords='axes fraction',
-        ha='center',
-        va="center",
+        xy=(1, 0),
+        xycoords='figure fraction',
+        ha='right',
+        va="bottom",
         **constants.FOOTNOTE_FONT
     )
+    plt.subplots_adjust(top=0.9, bottom=0.125)
     if save:
         logging.info("Saving {0} Figure...".format(title))
         plt.savefig("{0}/{1}.svg".format(
@@ -66,3 +68,53 @@ def pie(plot_data, title):
         textprops=constants.DESCRIPTION_FONT,
     )
     save_or_show_plot(title)
+
+
+def line_with_mean(plot_data, mean_list, title):
+    """Generate a seaborn line plot with mean annotations.
+
+    Args:
+        plot_data (pd.DataFrame): DataFrame containing data for plotting.
+        mean_list (list): List of tuples with labels and corresponding mean values.
+        title (str): Title for the plot.
+
+    """
+    sns.set(style="whitegrid")
+    set_sns_theme()
+    g = sns.displot(
+        data=plot_data,
+        x="Rating", kind="kde", hue="Age Group",
+        common_norm=False, facet_kws=dict(margin_titles=True),
+        aspect=1.5,
+        palette=constants.CUSTOM_COLORS,
+    )
+    for i, (label, mean_value) in enumerate(mean_list):
+        g.ax.axvline(
+            x=mean_value,
+            linestyle='dashed',
+            linewidth=2,
+            label=f'Mean ({label})',
+            color=constants.CUSTOM_COLORS[i]
+        )
+    g.set(xlim=(1, 10))
+    g.ax.set_yticklabels([f"{tick:.0%}" for tick in g.ax.get_yticks()])
+    g.ax.legend()
+    g.set_axis_labels("Rating", "Percent")
+    plt.subplots_adjust(top=0.9, bottom=0.125)
+    save_or_show_plot(title)
+
+
+def set_sns_theme():
+    """Set seaboorn theme constants."""
+    sns.set_theme(
+        font=constants.STANDART_FONTSTYLE.get_family()[0],
+        rc={
+            'font.size': constants.DESCRIPTION_FONT["fontsize"],
+            'axes.labelsize': constants.DESCRIPTION_FONT["fontsize"],
+            'axes.titlesize': constants.DESCRIPTION_FONT["fontsize"],
+            'xtick.labelsize': constants.DESCRIPTION_FONT["fontsize"],
+            'ytick.labelsize': constants.DESCRIPTION_FONT["fontsize"],
+            'legend.fontsize': constants.DESCRIPTION_FONT["fontsize"],
+            'legend.title_fontsize': constants.DESCRIPTION_FONT["fontsize"],
+        }
+    )

@@ -7,8 +7,12 @@ import re
 import constants
 
 # Import third party modiles
+from cachetools import TTLCache
+from cachetools import cached
 import pandas as pd
 
+# 10 minutes in seconds.
+_CACHE_TIMEOUT = 600
 LOGGER = logging.getLogger(__name__)
 
 
@@ -30,6 +34,7 @@ def concat_from_folder(folder_path=constants.DATA_FOLDER):
     return combined_df
 
 
+@cached(cache=TTLCache(maxsize=1024, ttl=_CACHE_TIMEOUT))
 def get_timestamp(folder_path=constants.DATA_FOLDER):
     files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
     newest_timestamp = None

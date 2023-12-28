@@ -57,7 +57,11 @@ def replace_ger_eng(csv_data):
     Returns:
         pd.DataFrame: DataFrame with replaced labels.
     """
-    csv_data.replace({"Ja": "Yes", "Nein": "No"}, inplace=True)
+    csv_data.replace({
+        "Ja": "Yes",
+        "Nein": "No",
+        "Unentschlossen": "Don't know",
+    }, inplace=True)
     return csv_data
 
 

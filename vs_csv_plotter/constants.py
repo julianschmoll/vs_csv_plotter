@@ -16,6 +16,8 @@ STUDENTS = 5500
 # Default Settings
 SAVE_PLOT = True
 SHOW_PLOT = False
+PLOTHEIGHT = 27
+PLOTWIDTH = 17
 
 # Style settings
 HEADLINE_FONTSTYLE = FontProperties(
@@ -34,16 +36,16 @@ CUSTOM_COLORS = [
     "#B9E3F9",
 ]
 HEADLINE_FONT = {
-    "fontsize": 16,
+    "fontsize": 50,
     "weight": "bold",
     "fontproperties": HEADLINE_FONTSTYLE
 }
 DESCRIPTION_FONT = {
-    "fontsize": 10,
+    "fontsize": 30,
     "fontproperties": STANDART_FONTSTYLE
 }
 FOOTNOTE_FONT = {
-    "fontsize": 5,
+    "fontsize": 16,
     "color": "gray",
     "fontproperties": FOOTNOTE_FONTSTYLE
 }

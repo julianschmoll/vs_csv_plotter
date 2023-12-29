@@ -40,11 +40,13 @@ def save_or_show_plot(
     plt.subplots_adjust(top=0.9, bottom=0.125)
     if save:
         logging.info("Saving {0} Figure...".format(title))
-        plt.savefig("{0}/{1}.svg".format(
-            constants.PLOT_FOLDER,
-            file_utils.sanitize_filename(title)
+        for extension in constants.PLOT_FILETYPE_LIST:
+            plt.savefig("{0}/{1}/{2}.{1}".format(
+                constants.PLOT_FOLDER,
+                extension,
+                file_utils.sanitize_filename(title)
+                )
             )
-        )
     if show:
         plt.show()
     plt.clf()
@@ -84,7 +86,7 @@ def line_with_mean(plot_data, mean_list, title):
     g = sns.displot(
         data=plot_data,
         x="Rating", kind="kde", hue="Age Group",
-        common_norm=False, 
+        common_norm=False,
         facet_kws=dict(margin_titles=True),
         aspect=1.5,
         palette=constants.CUSTOM_COLORS,

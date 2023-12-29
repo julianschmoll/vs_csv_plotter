@@ -35,6 +35,10 @@ CUSTOM_COLORS = [
     "#FFB30D",
     "#B9E3F9",
 ]
+TEXTCOLOR = "white"
+BACKGROUNDCOLOR = "black"
+
+
 HEADLINE_FONT = {
     "fontsize": 50,
     "weight": "bold",

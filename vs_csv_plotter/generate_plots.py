@@ -10,6 +10,7 @@ class PlotGenerator:
 
     def gather_data(self):
         """Gather Data from CSV Folder."""
+        file_utils.download_csv_data()
         self.combined_data = file_utils.replace_ger_eng(file_utils.concat_from_folder())
 
     def generate_plots(self):

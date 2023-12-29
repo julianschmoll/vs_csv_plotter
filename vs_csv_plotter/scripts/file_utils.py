@@ -3,12 +3,13 @@
 import logging
 import os
 import re
-
+import getpass
 # Import local modules
 import constants
 import pandas as pd
 # Import third party modiles
 from cachetools import TTLCache, cached
+import requests
 
 # 10 minutes in seconds.
 _CACHE_TIMEOUT = 600
@@ -17,9 +18,14 @@ logging.basicConfig(level=logging.INFO)
 
 def prepare_plot_folder():
     """Create the plot folder if it does not exist."""
-    if not os.path.exists(constants.PLOT_FOLDER):
-        logging.info("Prepared Plot folder")
-        os.makedirs(constants.PLOT_FOLDER)
+    logging.info("Prepared Plot folder")
+    os.makedirs(constants.PLOT_FOLDER, exist_ok=True)
+    for extension in constants.PLOT_FILETYPE_LIST:
+        os.makedirs(
+            os.path.join(constants.PLOT_FOLDER, extension),
+            exist_ok=True
+        )
+        print("created", os.path.join(constants.PLOT_FOLDER, extension))
 
 
 def concat_from_folder(folder_path=constants.DATA_FOLDER):
@@ -106,3 +112,31 @@ def sanitize_filename(name):
     tmp_name = tmp_name.replace("≤", "below or equal ")
     tmp_name = tmp_name.replace(" ", "_")
     return re.sub("[^a-zA-Z0-9_-]", "", tmp_name.lower())
+
+
+def download_file(url, folder_path, username, password):
+    """Downloads a file from a given URL and saves it to a specified folder.
+
+    Parameters:
+        url (str): The URL of the file to download.
+        folder_path (str): The path of the folder where the file will be saved.
+        username (str): The username for authentication.
+        password (str): The password for authentication.
+
+    """
+    response = requests.get(url, auth=(username, password), timeout=20)
+    file_name = "{0}.csv".format(url.split("/")[-1])
+    with open(f"{folder_path}/{file_name}", 'wb') as file:
+        file.write(response.content)
+
+
+def download_csv_data():
+    """Prompts the user for their username and password, then downloads CSV files from list.
+
+    URLs are defined in `constants.CSV_DOWNLOAD_LIST`, files are saved in `constants.DATA_FOLDER`.
+
+    """
+    username = input("Enter your username: ")
+    password = getpass.getpass("Enter your password: ")
+    for url in constants.CSV_DOWNLOAD_LIST:
+        download_file(url, constants.DATA_FOLDER, username, password)

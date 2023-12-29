@@ -4,6 +4,11 @@ from matplotlib.font_manager import FontProperties
 # File settings
 DATA_FOLDER = "data/csv"
 PLOT_FOLDER = "plot"
+CSV_DOWNLOAD_LIST = [
+    "https://cloud.vs-hdm.de/ocs/v2.php/apps/forms/api/v1.1/submissions/export/mLZLNgcYGBwR8JJg",
+    "https://cloud.vs-hdm.de/ocs/v2.php/apps/forms/api/v1.1/submissions/export/G6fDXyzcQFZX2nSG"
+]
+PLOT_FILETYPE_LIST=["svg", "png"]
 
 # Data
 STUDENTS = 5500

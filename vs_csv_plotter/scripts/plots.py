@@ -151,6 +151,18 @@ def plot_support_data(csv_data):
     not_wealthy_data = csv_data[csv_data[wealth_index] > 7]
     not_wealthy_support_count = not_wealthy_data[row_index].value_counts()
 
+    not_wealthy_over_26_data = not_wealthy_data[not_wealthy_data["Altersklasse"] == "> 26"]
+    not_wealthy_over_26_data_count = not_wealthy_over_26_data[row_index].value_counts()
+
+    wealthy_over_26_data = wealthy_data[wealthy_data["Altersklasse"] == "> 26"]
+    wealthy_over_26_data_count = wealthy_over_26_data[row_index].value_counts()
+
+    not_wealthy_under_26_data = not_wealthy_data[not_wealthy_data["Altersklasse"] == "≤ 26"]
+    not_wealthy_under_26_data_count = not_wealthy_under_26_data[row_index].value_counts()
+
+    wealthy_under_26_data = wealthy_data[wealthy_data["Altersklasse"] == "≤ 26"]
+    wealthy_under_26_data_count = wealthy_under_26_data[row_index].value_counts()
+
     not_having_or_wanting = csv_data[csv_data[row_index_bw_ticket] == "No"]
     not_having_or_wanting = not_having_or_wanting[not_having_or_wanting[d_ticket_index] == "No"]
     not_having_or_wanting_count = not_having_or_wanting[row_index].value_counts()
@@ -166,11 +178,27 @@ def plot_support_data(csv_data):
     )
     plot.pie(
         wealthy_support_count,
-        "Support for full solidarity ticket by financially not affected (Rated <4)"
+        "Support for full solidarity ticket by financially not affected (self Rated <4)"
     )
     plot.pie(
         not_wealthy_support_count,
-        "Support for full solidarity ticket by financially affected (Rated >7)"
+        "Support for full solidarity ticket by financially affected (self Rated >7)"
+    )
+    plot.pie(
+        not_wealthy_over_26_data_count,
+        "Support for full solidarity ticket by financially affected (>26) (self Rated >7)"
+    )
+    plot.pie(
+        wealthy_over_26_data_count,
+        "Support for full solidarity ticket by financially not affected  (>26) (self Rated <4)"
+    )
+    plot.pie(
+        not_wealthy_under_26_data_count,
+        "Support for full solidarity ticket by financially affected (≤26) (self Rated >7)"
+    )
+    plot.pie(
+        wealthy_under_26_data_count,
+        "Support for full solidarity ticket by financially not affected  (≤26) (self Rated <4)"
     )
     plot.pie(
         not_having_or_wanting_count,

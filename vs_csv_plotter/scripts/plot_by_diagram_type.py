@@ -7,6 +7,8 @@ from scripts import file_utils
 # Import third-party modules
 from matplotlib import pyplot as plt
 import seaborn as sns
+import numpy as np
+from scipy.interpolate import make_interp_spline
 
 logging.basicConfig(level=logging.INFO)
 
@@ -94,7 +96,8 @@ def line_with_mean(
     plot_data_key = None,
     x_value_label = "x",
     y_value_label = "y",
-    mean_list = [],
+    mean_list = None,
+    mean = None
 ):
     """Generate a seaborn line plot with mean annotations.
 
@@ -110,27 +113,29 @@ def line_with_mean(
     if plot_data_key:
         for plot_data_label, color in zip(plot_data[plot_data_key].unique(), constants.CUSTOM_COLORS):
             subset_data = plot_data[plot_data[plot_data_key] == plot_data_label]
-            sns.kdeplot(
-                data=subset_data,
-                x=x_axis_key,
-                common_norm=False,
+            sns.lineplot(
+                data=subset_data[x_axis_key],  # Specify x-axis variable
                 color=color,
                 label=f'{plot_data_key} {plot_data_label}',
-                cut=0,
-                bw_adjust=0.75,
-                linewidth=constants.PLOTWIDTH/4,
+                linewidth=constants.PLOTWIDTH/4
             )
-    both_mean = plot_data[x_axis_key].mean()
-    sns.kdeplot(
-        data=plot_data,
-        x=x_axis_key,
-        common_norm=False,
-        bw_adjust=1.5,
-        cut=0,
+    x = np.arange(len(plot_data[x_axis_key]))
+    y = plot_data[x_axis_key]
+
+    # Use cubic spline interpolation
+    spl = make_interp_spline(x, y, k=3)
+
+    # Generate smoother data points
+    smoothed_x = np.linspace(x.min(), x.max(), 300)
+    smoothed_y = spl(smoothed_x)
+
+    # Plot the smoothed curve
+    sns.lineplot(
+        x=smoothed_x,
+        y=smoothed_y,
         color=constants.CUSTOM_COLORS[-1],
-        linewidth=constants.PLOTWIDTH/4,
-        alpha=1,
-        label="Average smooted"
+        label="Average Smoothed",
+        linewidth=constants.PLOTWIDTH/4
     )
     if mean_list:
         for i, (label, mean_value) in enumerate(mean_list):
@@ -141,15 +146,17 @@ def line_with_mean(
                 label=f'Mean ({label})',
                 color=constants.CUSTOM_COLORS[i],
             )
-    plt.axvline(
-        x=both_mean,
-        linestyle='dashed',
-        linewidth=constants.PLOTWIDTH/2,
-        alpha=0.5,
-        label='Mean',
-        color=constants.CUSTOM_COLORS[-1],
-    )
+    if mean:
+        plt.axvline(
+            x=mean,
+            linestyle='dashed',
+            linewidth=constants.PLOTWIDTH/2,
+            alpha=0.5,
+            label='Mean',
+            color=constants.CUSTOM_COLORS[-1],
+        )
     plt.xlim(1, 10)
+    plt.ylim(0, 0.25)
     plt.yticks([tick for tick in plt.yticks()[0]], [f"{tick:.0%}" for tick in plt.yticks()[0]])
     plt.gca().xaxis.label.set_color(constants.TEXTCOLOR)
     plt.gca().yaxis.label.set_color(constants.TEXTCOLOR)

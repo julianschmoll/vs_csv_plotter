@@ -21,25 +21,29 @@ def plot_financial_impact(csv_data):
     over_26_data = csv_data[csv_data["Altersklasse"] == "> 26"]
     under_26_data = csv_data[csv_data["Altersklasse"] == "≤ 26"]
     plot_data_over_26 = pd.DataFrame({
-        'Rating': over_26_data[row_index],
+        'Rating': over_26_data[row_index].value_counts() / len(over_26_data),
         'Age Group': "> 26"
     })
     plot_data_under_26 = pd.DataFrame({
-        'Rating': under_26_data[row_index],
+        'Rating': under_26_data[row_index].value_counts() /len(under_26_data),
         'Age Group': "≤ 26"
     })
+    print(over_26_data[row_index])
+    mean = csv_data[row_index].mean()
     mean_over_26 = over_26_data[row_index].mean()
     mean_under_26 = under_26_data[row_index].mean()
     mean_list = [("> 26", mean_over_26), ("≤ 26", mean_under_26)]
     plot_data = pd.concat([plot_data_over_26, plot_data_under_26])
+    print(plot_data)
     plot.line_with_mean(
         plot_data,
         "Rating",
-        "Financial Impact of solidarity ticket",
+        "Self rated financial Impact of solidarity ticket",
         plot_data_key = "Age Group",
         x_value_label = "Rating (Scale 1 (no/minor problem) - 10 (cannot be financed))",
         y_value_label = "Percent",
         mean_list = mean_list,
+        mean=mean
     )
 
 
@@ -65,7 +69,7 @@ def plot_age_distribution(csv_data):
 
     """
     age_counts = csv_data["Altersklasse"].value_counts()
-    plot.pie(age_counts, "Age Distribution")
+    plot.pie(age_counts, "Age Distribution of participants")
 
 
 def plot_ticket_data(csv_data):  # noqa: WPS210 As splitting up wouldn't make sense
@@ -231,20 +235,26 @@ def plot_support_data_vs_financial_impact(csv_data):
         +"finanziell treffen? (Skala 1 (kein/kleines Problem) - 10 (nicht finanzierbar))"
     )
     
-    df = pd.DataFrame()
-    for wealth_value in range(1, 11):
-        data = csv_data[csv_data[wealth_index] == wealth_value]
-        support_count = data[row_index].value_counts().reset_index()
-        support_count.columns = [row_index, "count"]
-        support_count["relative_count"] = (support_count["count"] / len(data))
-        support_count["wealth_index"] = wealth_value
-        df = pd.concat([df, support_count], ignore_index=True)
-    
-    categories = df[row_index].unique()
-    title = "Support for full solidarity ticket over financial situation (self Rated)"
-    x_value = "wealth_index"
-    y_value = "relative_count"
-    x_label = "Rating (Scale 1 (no/minor problem) - 10 (cannot be financed))"
-    y_label = "Percent"
-    
-    plot.plot_line_chart(row_index, df, categories, title, x_value, y_value, x_label, y_label)
+    csv_dict = {
+        "(All Ages)": csv_data,
+        "(>26)":csv_data[csv_data["Altersklasse"] == "> 26"],
+        "(≤26)":csv_data[csv_data["Altersklasse"] == "≤ 26"]
+    }
+    for label, csv_data in csv_dict.items():
+        df = pd.DataFrame()
+        for wealth_value in range(1, 11):
+            data = csv_data[csv_data[wealth_index] == wealth_value]
+            support_count = data[row_index].value_counts().reset_index()
+            support_count.columns = [row_index, "count"]
+            support_count["relative_count"] = support_count["count"] / len(data)
+            support_count["wealth_index"] = wealth_value
+            df = pd.concat([df, support_count], ignore_index=True)
+
+        categories = df[row_index].unique()
+        title = f"Support for full solidarity ticket over financial situation {label} (self Rated)"
+        x_value = "wealth_index"
+        y_value = "relative_count"
+        x_label = "Rating (Scale 1 (no/minor problem) - 10 (cannot be financed))"
+        y_label = "Percent"
+
+        plot.plot_line_chart(row_index, df, categories, title, x_value, y_value, x_label, y_label)

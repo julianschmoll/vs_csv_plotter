@@ -11,6 +11,7 @@ setup(
         'matplotlib',
         'cachetools',
         'seaborn',
-        'requests'
+        'requests',
+        'scipy'
     ],
 )

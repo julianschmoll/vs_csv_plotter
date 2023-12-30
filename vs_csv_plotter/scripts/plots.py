@@ -3,6 +3,7 @@
 import constants
 # Import third party modules
 import pandas as pd
+from matplotlib import pyplot as plt
 from scripts import plot_by_diagram_type as plot
 
 
@@ -32,8 +33,13 @@ def plot_financial_impact(csv_data):
     mean_list = [("> 26", mean_over_26), ("≤ 26", mean_under_26)]
     plot_data = pd.concat([plot_data_over_26, plot_data_under_26])
     plot.line_with_mean(
-        plot_data, mean_list,
-        "Financial Impact of solidarity ticket"
+        plot_data,
+        "Rating",
+        "Financial Impact of solidarity ticket",
+        plot_data_key = "Age Group",
+        x_value_label = "Rating (Scale 1 (no/minor problem) - 10 (cannot be financed))",
+        y_value_label = "Percent",
+        mean_list = mean_list,
     )
 
 
@@ -204,3 +210,41 @@ def plot_support_data(csv_data):
         not_having_or_wanting_count,
         "Currently not interested in any ticket but would support solidarity Ticket"
     )
+
+
+def plot_support_data_vs_financial_impact(csv_data):
+    """Plot support for full solidarity ticket vs. financial impact.
+
+    This function generates a line plot comparing the support for a full solidarity ticket
+    with the financial impact ratings, for both age groups.
+
+    Parameters:
+        csv_data (pd.DataFrame): DataFrame with survey data.
+
+    """
+    row_index = (
+        "Würdest du ein vollsolidarisches Deutschlandticket unterstützen?"
+    )
+
+    wealth_index = (
+        "Wie stark würde dich das vollsolidarische bundesweite Semesterticket "
+        +"finanziell treffen? (Skala 1 (kein/kleines Problem) - 10 (nicht finanzierbar))"
+    )
+    
+    df = pd.DataFrame()
+    for wealth_value in range(1, 11):
+        data = csv_data[csv_data[wealth_index] == wealth_value]
+        support_count = data[row_index].value_counts().reset_index()
+        support_count.columns = [row_index, "count"]
+        support_count["relative_count"] = (support_count["count"] / len(data))
+        support_count["wealth_index"] = wealth_value
+        df = pd.concat([df, support_count], ignore_index=True)
+    
+    categories = df[row_index].unique()
+    title = "Support for full solidarity ticket over financial situation (self Rated)"
+    x_value = "wealth_index"
+    y_value = "relative_count"
+    x_label = "Rating (Scale 1 (no/minor problem) - 10 (cannot be financed))"
+    y_label = "Percent"
+    
+    plot.plot_line_chart(row_index, df, categories, title, x_value, y_value, x_label, y_label)

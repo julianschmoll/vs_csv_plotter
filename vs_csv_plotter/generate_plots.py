@@ -20,6 +20,8 @@ class PlotGenerator:
         plots.plot_ticket_data(self.combined_data)
         plots.plot_support_data(self.combined_data)
         plots.plot_financial_impact(self.combined_data)
+        plots.plot_support_data_vs_financial_impact(self.combined_data)
+
 
 if __name__ == "__main__":
     plot_generator = PlotGenerator()

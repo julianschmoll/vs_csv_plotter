@@ -3,3 +3,5 @@ matplotlib
 cachetools
 seaborn
 requests
+scipy
+datetime

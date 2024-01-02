@@ -12,6 +12,7 @@ setup(
         'cachetools',
         'seaborn',
         'requests',
-        'scipy'
+        'scipy',
+        'datetime'
     ],
 )

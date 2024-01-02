@@ -1,15 +1,19 @@
 """Functions for preparing, processing, and caching data from CSV files."""
 # Import built-in modules
+import locale
 import logging
 import os
 import re
-import getpass
+from datetime import datetime
+
 # Import local modules
 import constants
-import pandas as pd
-# Import third party modiles
+
+# Import third-party modules
 from cachetools import TTLCache, cached
+import pandas as pd
 import requests
+
 
 # 10 minutes in seconds.
 _CACHE_TIMEOUT = 600
@@ -90,11 +94,11 @@ def get_timestamp(folder_path=constants.DATA_FOLDER):
     newest_timestamp = None
     for file in files:
         timestamp_seconds = os.path.getmtime(os.path.join(folder_path, file))
-        timestamp = pd.to_datetime(timestamp_seconds, unit='s')
+        timestamp = pd.to_datetime(timestamp_seconds, unit="s")
         if newest_timestamp is None or timestamp > newest_timestamp:
             newest_timestamp = timestamp
     return "CSV File Timestamp: {0}".format(
-        newest_timestamp.strftime('%d.%m.%Y - %H:%M:%S'),
+        newest_timestamp.strftime("%d.%m.%Y - %H:%M:%S"),
     )
 
 
@@ -126,7 +130,7 @@ def download_file(url, folder_path, username, password):
     """
     response = requests.get(url, auth=(username, password), timeout=20)
     file_name = "{0}.csv".format(url.split("/")[-1])
-    with open(f"{folder_path}/{file_name}", 'wb') as file:
+    with open(f"{folder_path}/{file_name}", "wb") as file:
         file.write(response.content)
 
 
@@ -140,3 +144,36 @@ def download_csv_data():
     password = getpass.getpass("Enter your password: ")
     for url in constants.CSV_DOWNLOAD_LIST:
         download_file(url, constants.DATA_FOLDER, username, password)
+
+
+def convert_timestamp(timestamp):
+    """Convert String in CSV to valid Timestamp.
+    
+    Args:
+        timestamp (str): CSV Timestamp
+        
+    Returns:
+        timestamp (str): Timestamp which can be used for plotting
+    """
+    locale.setlocale(locale.LC_TIME, "de_DE.UTF-8")
+    pattern = re.compile(r"\w+, (?P<day>\d{1,2})\. (?P<month>\w+) (?P<year>\d{4}) um (?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2}) GMT\+0:00")
+    match = re.match(pattern, timestamp)
+    if not match:
+        print(f"Timestamp {timestamp} does not match the expected format.")
+        locale.setlocale(locale.LC_TIME, "C")
+        return None
+    month_map = {
+        "Januar": 1, "Februar": 2, "März": 3, "April": 4, "Mai": 5, "Juni": 6,
+        "Juli": 7, "August": 8, "September": 9, "Oktober": 10, "November": 11, "Dezember": 12
+    }
+    dt = datetime(
+        int(match.group("year")),
+        month_map[match.group("month")],
+        int(match.group("day")),
+        int(match.group("hour")),
+        int(match.group("minute")),
+        int(match.group("second"))
+    )
+    locale.setlocale(locale.LC_TIME, "C")
+    return dt
+

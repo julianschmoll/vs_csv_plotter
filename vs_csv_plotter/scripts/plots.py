@@ -1,10 +1,11 @@
 """Plots from current survey."""
 # Import local modules
 import constants
-# Import third party modules
-import pandas as pd
-from matplotlib import pyplot as plt
+from scripts import file_utils
 from scripts import plot_by_diagram_type as plot
+
+# Import third-party modules
+import pandas as pd
 
 
 def plot_financial_impact(csv_data):
@@ -21,12 +22,12 @@ def plot_financial_impact(csv_data):
     over_26_data = csv_data[csv_data["Altersklasse"] == "> 26"]
     under_26_data = csv_data[csv_data["Altersklasse"] == "≤ 26"]
     plot_data_over_26 = pd.DataFrame({
-        'Rating': over_26_data[row_index].value_counts() / len(over_26_data),
-        'Age Group': "> 26"
+        "Rating": over_26_data[row_index].value_counts() / len(over_26_data),
+        "Age Group": "> 26"
     })
     plot_data_under_26 = pd.DataFrame({
-        'Rating': under_26_data[row_index].value_counts() /len(under_26_data),
-        'Age Group': "≤ 26"
+        "Rating": under_26_data[row_index].value_counts() /len(under_26_data),
+        "Age Group": "≤ 26"
     })
     print(over_26_data[row_index])
     mean = csv_data[row_index].mean()
@@ -72,7 +73,7 @@ def plot_age_distribution(csv_data):
     plot.pie(age_counts, "Age Distribution of participants")
 
 
-def plot_ticket_data(csv_data):  # noqa: WPS210 As splitting up wouldn't make sense
+def plot_ticket_data(csv_data):  # noqa: WPS210 As splitting up wouldn"t make sense
     """Plot ticket-related data based on survey responses.
 
     This function generates three pie charts illustrating ticket-related
@@ -257,4 +258,32 @@ def plot_support_data_vs_financial_impact(csv_data):
         x_label = "Rating (Scale 1 (no/minor problem) - 10 (cannot be financed))"
         y_label = "Percent"
 
-        plot.plot_line_chart(row_index, df, categories, title, x_value, y_value, x_label, y_label)
+        plot.plot_stack_chart(row_index, df, categories, title, x_value, y_value, x_label, y_label)
+
+
+def plot_participation_over_time(data):
+    """Plot participation over time.
+
+    This function generates a line plot comparing the support for a full solidarity ticket
+    with the financial impact ratings, for both age groups.
+
+    Parameters:
+        csv_data (pd.DataFrame): DataFrame with survey data.
+
+    """
+    df = pd.DataFrame()
+    df["Zeitstempel"] = data["Zeitstempel"].apply(file_utils.convert_timestamp)
+    df = df.sort_values(by="Zeitstempel")
+    df["Participation"] = range(1, len(df) + 1)
+    plot.plot_line_chart(
+        row_index="Zeitstempel",
+        df=df,
+        categories=["Participation"],
+        title="Participation Over Time",
+        x_value="Zeitstempel",
+        y_value="Participation",
+        x_label="Time",
+        y_label="Cumulative Number of Participants",
+        xlim=(min(df["Zeitstempel"]), max(df["Zeitstempel"])),
+        ylim=(0, max(df["Participation"]) + 10)
+    )

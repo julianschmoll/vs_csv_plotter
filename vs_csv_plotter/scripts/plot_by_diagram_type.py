@@ -8,6 +8,7 @@ from scripts import file_utils
 
 # Import third-party modules
 from matplotlib import pyplot as plt
+from matplotlib.dates import AutoDateLocator, DateFormatter
 import numpy as np
 import seaborn as sns
 from scipy.interpolate import make_interp_spline
@@ -202,6 +203,8 @@ def plot_line_chart(row_index, df, categories, title, x_value, y_value, x_label,
     plt.gca().xaxis.label.set_color(constants.TEXTCOLOR)
     plt.gca().yaxis.label.set_color(constants.TEXTCOLOR)
     plt.gca().title.set_color(constants.TEXTCOLOR)
+    plt.gca().xaxis.set_major_locator(AutoDateLocator())
+    plt.gca().xaxis.set_major_formatter(DateFormatter('%d.%m-%Y'))
 
     legend = plt.legend()
     for text in legend.get_texts():

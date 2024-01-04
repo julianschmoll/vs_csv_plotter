@@ -144,7 +144,7 @@ def download_csv_data():
     username = input("Enter your username: ")
     password = getpass.getpass("Enter your password: ")
     for url in constants.CSV_DOWNLOAD_LIST:
-        download_file(url, constants.DATA_FOLDER, constants.USERNAME, constants.PASSWORD)
+        download_file(url, constants.DATA_FOLDER, username, password)
 
 
 def convert_timestamp(timestamp):

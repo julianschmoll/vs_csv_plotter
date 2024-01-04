@@ -98,7 +98,7 @@ def get_timestamp(folder_path=constants.DATA_FOLDER):
         timestamp = pd.to_datetime(timestamp_seconds, unit="s")
         if newest_timestamp is None or timestamp > newest_timestamp:
             newest_timestamp = timestamp
-    return "CSV File Timestamp: {0}".format(
+    return "CSV File Timestamp: {0} UTC".format(
         newest_timestamp.strftime("%d.%m.%Y - %H:%M:%S"),
     )
 
@@ -144,7 +144,7 @@ def download_csv_data():
     username = input("Enter your username: ")
     password = getpass.getpass("Enter your password: ")
     for url in constants.CSV_DOWNLOAD_LIST:
-        download_file(url, constants.DATA_FOLDER, username, password)
+        download_file(url, constants.DATA_FOLDER, constants.USERNAME, constants.PASSWORD)
 
 
 def convert_timestamp(timestamp):

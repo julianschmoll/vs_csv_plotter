@@ -29,7 +29,6 @@ def plot_financial_impact(csv_data):
         "Rating": under_26_data[row_index].value_counts() /len(under_26_data),
         "Age Group": "≤ 26"
     })
-    print(over_26_data[row_index])
     mean = csv_data[row_index].mean()
     mean_over_26 = over_26_data[row_index].mean()
     mean_under_26 = under_26_data[row_index].mean()
@@ -142,79 +141,21 @@ def plot_support_data(csv_data):
         "Wie stark würde dich das vollsolidarische bundesweite Semesterticket "
         +"finanziell treffen? (Skala 1 (kein/kleines Problem) - 10 (nicht finanzierbar))"
     )
-    row_index_bw_ticket = (
-        "Beziehst du aktuell das Jugendticket BW / "
-        + "Würdest du das Jugendticket BW beziehen wenn du berechtigt wärst?"
-    )
-    d_ticket_index = "Beziehst du aktuell das Deutschlandticket (49 € Ticket)?"
 
-    general_count = csv_data[row_index].value_counts()
+    support_counts = {
+        ">26": csv_data[csv_data["Altersklasse"] == "> 26"][row_index].value_counts(),
+        "All Ages": csv_data[row_index].value_counts(),
+        "≤26": csv_data[csv_data["Altersklasse"] == "≤ 26"][row_index].value_counts(),
+        "Financially not affected (Self Rated <4)": csv_data[csv_data[wealth_index] < 4][row_index].value_counts(),
+        "Financially affected (Self Rated >7)": csv_data[csv_data[wealth_index] > 7][row_index].value_counts(),
+        "Financially affected (Self Rated >7) (>26)": csv_data[(csv_data[wealth_index] > 7) & (csv_data["Altersklasse"] == "> 26")][row_index].value_counts(),
+        "Financially not affected (Self Rated <4) (>26)": csv_data[(csv_data[wealth_index] < 4) & (csv_data["Altersklasse"] == "> 26")][row_index].value_counts(),
+        "Financially affected (Self Rated >7) (≤26)": csv_data[(csv_data[wealth_index] > 7) & (csv_data["Altersklasse"] == "≤ 26")][row_index].value_counts(),
+        "Financially not affected (Self Rated <4) (≤26)": csv_data[(csv_data[wealth_index] < 4) & (csv_data["Altersklasse"] == "≤ 26")][row_index].value_counts(),
+    }
 
-    over_26_data = csv_data[csv_data["Altersklasse"] == "> 26"]
-    over_26_count = over_26_data[row_index].value_counts()
-
-    under_26_data = csv_data[csv_data["Altersklasse"] == "≤ 26"]
-    under_26_count = under_26_data[row_index].value_counts()
-
-    wealthy_data = csv_data[csv_data[wealth_index] < 4]
-    wealthy_support_count = wealthy_data[row_index].value_counts()
-
-    not_wealthy_data = csv_data[csv_data[wealth_index] > 7]
-    not_wealthy_support_count = not_wealthy_data[row_index].value_counts()
-
-    not_wealthy_over_26_data = not_wealthy_data[not_wealthy_data["Altersklasse"] == "> 26"]
-    not_wealthy_over_26_data_count = not_wealthy_over_26_data[row_index].value_counts()
-
-    wealthy_over_26_data = wealthy_data[wealthy_data["Altersklasse"] == "> 26"]
-    wealthy_over_26_data_count = wealthy_over_26_data[row_index].value_counts()
-
-    not_wealthy_under_26_data = not_wealthy_data[not_wealthy_data["Altersklasse"] == "≤ 26"]
-    not_wealthy_under_26_data_count = not_wealthy_under_26_data[row_index].value_counts()
-
-    wealthy_under_26_data = wealthy_data[wealthy_data["Altersklasse"] == "≤ 26"]
-    wealthy_under_26_data_count = wealthy_under_26_data[row_index].value_counts()
-
-    not_having_or_wanting = csv_data[csv_data[row_index_bw_ticket] == "No"]
-    not_having_or_wanting = not_having_or_wanting[not_having_or_wanting[d_ticket_index] == "No"]
-    not_having_or_wanting_count = not_having_or_wanting[row_index].value_counts()
-
-    plot.pie(
-        over_26_count, "Would you support a full solidarity ticket for Germany? (>26)"
-    )
-    plot.pie(
-        general_count, "Would you support a full solidarity ticket for Germany?"
-    )
-    plot.pie(
-        under_26_count, "Would you support a full solidarity ticket for Germany? (≤26)"
-    )
-    plot.pie(
-        wealthy_support_count,
-        "Support for full solidarity ticket by financially not affected (self Rated <4)"
-    )
-    plot.pie(
-        not_wealthy_support_count,
-        "Support for full solidarity ticket by financially affected (self Rated >7)"
-    )
-    plot.pie(
-        not_wealthy_over_26_data_count,
-        "Support for full solidarity ticket by financially affected (>26) (self Rated >7)"
-    )
-    plot.pie(
-        wealthy_over_26_data_count,
-        "Support for full solidarity ticket by financially not affected  (>26) (self Rated <4)"
-    )
-    plot.pie(
-        not_wealthy_under_26_data_count,
-        "Support for full solidarity ticket by financially affected (≤26) (self Rated >7)"
-    )
-    plot.pie(
-        wealthy_under_26_data_count,
-        "Support for full solidarity ticket by financially not affected  (≤26) (self Rated <4)"
-    )
-    plot.pie(
-        not_having_or_wanting_count,
-        "Currently not interested in any ticket but would support solidarity Ticket"
-    )
+    for label, data_count in support_counts.items():
+        plot.pie(data_count, f"Would you support a full solidarity ticket for Germany? ({label})")
 
 
 def plot_support_data_vs_financial_impact(csv_data):
@@ -235,7 +176,7 @@ def plot_support_data_vs_financial_impact(csv_data):
         "Wie stark würde dich das vollsolidarische bundesweite Semesterticket "
         +"finanziell treffen? (Skala 1 (kein/kleines Problem) - 10 (nicht finanzierbar))"
     )
-    
+
     csv_dict = {
         "(All Ages)": csv_data,
         "(>26)":csv_data[csv_data["Altersklasse"] == "> 26"],
@@ -276,7 +217,6 @@ def plot_participation_over_time(data):
     df = df.sort_values(by="Zeitstempel")
     df["Participation"] = range(1, len(df) + 1)
     plot.plot_line_chart(
-        row_index="Zeitstempel",
         df=df,
         categories=["Participation"],
         title="Participation Over Time",

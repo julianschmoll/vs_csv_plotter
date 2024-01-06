@@ -129,7 +129,16 @@ def download_file(url, folder_path, username, password):
         password (str): The password for authentication.
 
     """
-    response = requests.get(url, auth=(username, password), timeout=20)
+    authenticated = False
+    while not authenticated:
+        response = requests.get(url, auth=(username, password), timeout=20)
+        if response.status_code == 401:  # Unauthorized
+            print("Authentication failed. Please try again.")
+            username = input("Enter your username: ")
+            password = getpass.getpass("Enter your password: ")
+        else:
+            authenticated = True
+
     file_name = "{0}.csv".format(url.split("/")[-1])
     with open(f"{folder_path}/{file_name}", "wb") as file:
         file.write(response.content)
@@ -177,4 +186,3 @@ def convert_timestamp(timestamp):
     )
     locale.setlocale(locale.LC_TIME, "C")
     return dt
-

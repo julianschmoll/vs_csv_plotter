@@ -55,8 +55,8 @@ def save_or_show_plot(title, save=constants.SAVE_PLOT, show=constants.SHOW_PLOT)
             logging.info("Saved {0}".format(fig_file))
     if show:
         plt.show()
-
     plt.clf()
+    plt.close("all")
 
 
 def pie(plot_data, title):
@@ -172,7 +172,7 @@ def line_with_mean(
     save_or_show_plot(title)
 
 
-def plot_line_chart(row_index, df, categories, title, x_value, y_value, x_label, y_label, xlim=(1, 10), ylim=(0, 1)):
+def plot_line_chart(df, categories, title, x_value, y_value, x_label, y_label, xlim=(1, 10), ylim=(0, 1)):
     """Generate plot of a line chart.
     Args:
         row_index (str): The column in the DataFrame used as the category.

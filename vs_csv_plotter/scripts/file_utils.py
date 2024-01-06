@@ -30,7 +30,7 @@ def prepare_plot_folder():
             os.path.join(constants.PLOT_FOLDER, extension),
             exist_ok=True
         )
-        print("created", os.path.join(constants.PLOT_FOLDER, extension))
+        logging.info("created", os.path.join(constants.PLOT_FOLDER, extension))
 
 
 def concat_from_folder(folder_path=constants.DATA_FOLDER):
@@ -133,7 +133,7 @@ def download_file(url, folder_path, username, password):
     while not authenticated:
         response = requests.get(url, auth=(username, password), timeout=20)
         if response.status_code == 401:  # Unauthorized
-            print("Authentication failed. Please try again.")
+            logging.warning("Authentication failed. Please try again.")
             username = input("Enter your username: ")
             password = getpass.getpass("Enter your password: ")
         else:
@@ -169,7 +169,7 @@ def convert_timestamp(timestamp):
     pattern = re.compile(r"\w+, (?P<day>\d{1,2})\. (?P<month>\w+) (?P<year>\d{4}) um (?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2}) GMT\+0:00")
     match = re.match(pattern, timestamp)
     if not match:
-        print(f"Timestamp {timestamp} does not match the expected format.")
+        logging.warning(f"Timestamp {timestamp} does not match the expected format.")
         locale.setlocale(locale.LC_TIME, "C")
         return None
     month_map = {

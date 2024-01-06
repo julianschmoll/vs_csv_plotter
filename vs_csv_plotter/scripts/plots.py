@@ -34,7 +34,6 @@ def plot_financial_impact(csv_data):
     mean_under_26 = under_26_data[row_index].mean()
     mean_list = [("> 26", mean_over_26), ("≤ 26", mean_under_26)]
     plot_data = pd.concat([plot_data_over_26, plot_data_under_26])
-    print(plot_data)
     plot.line_with_mean(
         plot_data,
         "Rating",

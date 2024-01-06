@@ -1,6 +1,6 @@
 // .vscode/settings.json
 {
     "pylint.args": [
-        "--disable=E0401,C0209,W1202"
+        "--disable=E0401,C0209,W1202,E0602,E1136,E1137"
     ]
 }

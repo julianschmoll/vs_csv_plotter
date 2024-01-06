@@ -30,7 +30,7 @@ def prepare_plot_folder():
             os.path.join(constants.PLOT_FOLDER, extension),
             exist_ok=True
         )
-        logging.info("created", os.path.join(constants.PLOT_FOLDER, extension))
+        logging.info("created {0}".format(os.path.join(constants.PLOT_FOLDER, extension)))
 
 
 def concat_from_folder(folder_path=constants.DATA_FOLDER):
